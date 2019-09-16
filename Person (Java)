@@ -1,0 +1,90 @@
+public class Person {
+
+    static public boolean MALE = false;
+    static public boolean FEMALE = true;
+    private String firstName;
+    private String lastName;
+    private int age;
+    private boolean female;
+
+    public Person(String firstName, String lastName, int age, boolean female) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.female = female;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+
+    public boolean isFemale() {
+        return female;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Person)){
+            return false;
+        }
+        Person tmp = (Person)obj;
+        return firstName.equals(tmp.getFirstName()) && lastName.equals(tmp.getLastName()) && age == tmp.getAge() && female == tmp.isFemale();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append(" ").append(lastName).append(" (");
+        if (female == FEMALE) {
+            sb.append("f): ");
+        }
+        else {
+           sb.append("m): ");
+        }
+        sb.append(age);
+        return sb.toString();
+    }
+}
+
+
+class Test {
+
+    public static void main(String[] args) {
+        Person a = new Person("Teszt", "Elek", 382, Person.MALE);
+        System.out.println(a);
+        Person b = new Person("Har","Mónika",621,Person.FEMALE);
+        System.out.println(b);
+        Person c = new Person("Teszt", "Elek", 382, Person.MALE);
+        System.out.println(c);
+        System.out.println(c.getAge());
+        System.out.println(a == c);
+        System.out.println(a.equals(c));
+        System.out.println(a == b);
+        System.out.println(a.equals(b));
+        b = a;
+        System.out.println(a == b);
+        System.out.println(a.equals(b));
+    }
+}
