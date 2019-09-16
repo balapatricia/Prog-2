@@ -1,0 +1,82 @@
+public class Pont {
+
+    private double x;
+    private double y;
+
+    public Pont(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Pont() {
+        this(0.0,0.0);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public double tavolsag(Pont p) {
+        return Math.sqrt(Math.pow(this.x-p.getX(),2)+Math.pow(y-p.getY(),2));
+    }
+
+    public double tavolsag() {
+        return this.tavolsag(new Pont(0.0,0.0));
+    }
+
+    public static double tavolsag(Pont p, Pont s) {
+        return Math.sqrt(Math.pow(s.getX()-p.getX(),2)+Math.pow(s.getY()-p.getY(),2));
+    }
+
+    public void mozgatas(double dx, double dy) {
+        this.x += dx;
+        this.y += dy;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Pont)) {
+            return false;
+        }
+        Pont tmp = (Pont)obj;
+        return this.tavolsag() == tmp.tavolsag();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(").append(x).append(", ").append(y).append(")");
+        return sb.toString();
+    }
+}
+
+class Test2 {
+
+    public static void main(String[] args) {
+        Pont p = new Pont();
+        System.out.println(p);
+        Pont s = new Pont(3.2,4.6);
+        System.out.println(s);
+        System.out.println(s.tavolsag());
+        Pont q = new Pont(2.1,5.8);
+        System.out.println(q);
+        System.out.println(s.equals(q));
+        System.out.println(s.equals(s));
+        System.out.println(Pont.tavolsag(s, q));
+        System.out.println(s.tavolsag(q));
+        s.mozgatas(1.0, 1.0);
+        System.out.println(s);
+    }
+}
