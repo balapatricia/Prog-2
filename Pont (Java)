@@ -28,12 +28,12 @@ public class Pont {
         this.y = y;
     }
 
+    public double tavolsag() {
+        return Math.sqrt(Math.pow(this.x,2)+Math.pow(this.y,2));
+    }
+    
     public double tavolsag(Pont p) {
         return Math.sqrt(Math.pow(this.x-p.getX(),2)+Math.pow(y-p.getY(),2));
-    }
-
-    public double tavolsag() {
-        return this.tavolsag(new Pont(0.0,0.0));
     }
 
     public static double tavolsag(Pont p, Pont s) {
