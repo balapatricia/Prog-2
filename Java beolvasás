@@ -1,0 +1,39 @@
+import java.util.Scanner;
+
+public class Elso {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+//        int n = sc.nextInt();
+//        System.out.println(n);
+//        while (sc.hasNext()){
+//            n = sc.nextInt();
+//            System.out.println(n);
+//        }
+        String s = sc.nextLine();
+        System.out.println(s);
+        String[] st = s.split(" ");
+        for (String item :st ) {
+            System.out.println(item+2);
+            System.out.println(Integer.parseInt(item)+2);
+        }
+
+        String sor = sc.nextLine();
+        Scanner sors = new Scanner(sor);              //a consol helyett egy már beolvasott sorból olvasunk új értékeket
+        while (sors.hasNext()) {
+            int szam = sors.nextInt();
+            System.out.println(szam);
+        }
+
+
+        while (sc.hasNextLine()){
+            String sor2 = sc.nextLine();
+            if (sor.length() < 10){
+                System.out.println(sor2);
+            }
+            else {
+                System.out.println(sor2.substring(0,9));
+            }
+        }
+    }
+}
