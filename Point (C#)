@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+    class Pont
+    {
+
+        public double X { get; set; }
+
+        public double Y { get; set; }
+
+        public Pont(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public Pont():this(0.0,0.0)
+        {
+        }
+
+        public override string ToString()
+        {
+            return "(" + X + ";" + Y + ")";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Pont tmp = obj as Pont;
+            if (tmp == null)
+            {
+                return false;
+            }
+            return X == tmp.X && Y == tmp.Y;
+        }
+
+        public double EzIsTavolsag { get => Math.Sqrt(Math.Pow(X, 2.0) + Math.Pow(Y, 2.0));  }
+
+        public double Tavolsag()
+        {
+            return Math.Sqrt(Math.Pow(X, 2.0) + Math.Pow(Y, 2.0));
+        }
+
+        public double Tavolsag(Pont p)
+        {
+            return Math.Sqrt(Math.Pow(X - p.X, 2.0) + Math.Pow(Y - p.Y, 2.0));
+        }
+
+        public static double Tavolsag(Pont p, Pont s)
+        {
+            return Math.Sqrt(Math.Pow(p.X - s.X, 2.0) + Math.Pow(p.Y - s.Y, 2.0));
+        }
+    }
+}
+
+
+
+//Teszt osztály
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+	class Test
+	{
+      static void Main(string[] args)
+      {
+            Pont p = new Pont(3.4,2.5);
+            Console.WriteLine(p);
+            Pont s = new Pont();
+            Pont r = new Pont(3.4, 2.5);
+            Console.WriteLine(p==s);
+            Console.WriteLine(p.Equals(s));
+            Console.WriteLine(p.Equals(r));
+            Console.WriteLine(p.Tavolsag());
+            Console.WriteLine(p.Tavolsag(s));
+            Console.WriteLine(Pont.Tavolsag(p,s));
+             
+        }
+    }
+}
