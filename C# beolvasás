@@ -1,0 +1,54 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string s = Console.ReadLine();
+            Console.WriteLine(s);
+            string[] stomb = s.Split(' ');
+            foreach (string item in stomb)
+            {
+                Console.WriteLine(item+2);
+                Console.WriteLine(int.Parse(item)+2);
+                Console.WriteLine(Convert.ToInt32(item)+2);
+            }
+
+            string st = Console.ReadLine();
+            while (st != null)
+            {
+                int sti;
+                if (int.TryParse(st, out sti))
+                {
+                    Console.WriteLine(sti + 2);
+                }
+                else
+                {
+                    Console.WriteLine("A konverzió nem sikerült.");
+                }
+
+                st = Console.ReadLine();
+            }
+
+            string sor = Console.ReadLine();
+            while (sor != null)
+            {
+                if (sor.Length < 10)
+                {
+                    Console.WriteLine(sor);
+                }
+                else
+                {
+                    Console.WriteLine(sor.Substring(0,9));
+                }
+                sor = Console.ReadLine();
+            }
+        }
+    }
+}
