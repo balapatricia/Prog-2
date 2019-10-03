@@ -4,27 +4,43 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HelloWorld2
+namespace HelloWorld
 {
     class Person
     {
+        public static bool MALE = false;
+        public static bool FEMALE = true;
 
-        public string name;
-        public int age;
-        public bool female;
+        //public string name;
+        //public int age;
+        //public bool female;
+
+        //private string name;
+
+        //public int Name                       //propfull+tab+tab
+        //{
+        //    get { return Name; }
+        //    set { Name = value; }
+        //}
+
+        public string Name { get; set; }        //prop+tab+tab
+
+        public int Age { get; set; }
+
+        public bool Female { get; set; }
 
         public Person(string name, int age, bool female)
         {
-            this.name = name;
-            this.age = age;
-            this.female = female;
+            this.Name = name;
+            this.Age = age;
+            this.Female = female;
         }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(name).Append(" (");
-            if (female)
+            sb.Append(Name).Append(" (");
+            if (Female)
             {
                 sb.Append("f): ");
             }
@@ -32,11 +48,22 @@ namespace HelloWorld2
             {
                 sb.Append("m): ");
             }
-            sb.Append(age);
+            sb.Append(Age);
             return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Person tmp = obj as Person;
+            if (tmp == null)
+            {
+                return false;
+            }
+            return Name == tmp.Name && Age == tmp.Age && Female == tmp.Female;
         }
     }
 }
+
 
 //Test
 
@@ -46,16 +73,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HelloWorld2
+namespace HelloWorld
 {
     class Test
     {
         static void Main(string[] args)
         {
-            Person p = new Person("Teszt Elek", 21, false);
+            Person p = new Person("Teszt Elek", 21, Person.MALE);
+            Person s = new Person("Har Mónika", 21, Person.FEMALE);
+            Person r = new Person("Har Mónika", 21, Person.FEMALE);
             Console.WriteLine(p);
-            Person s = new Person("Har Mónika", 22, true);
             Console.WriteLine(s);
+            Console.WriteLine(p == s);
+            Console.WriteLine(s == r);
+            Console.WriteLine(s.Equals(r));
         }
     }
 }
