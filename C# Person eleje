@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Elso
+{
+    class Person
+    {
+
+        public string name;
+        public int age;
+        public bool female;
+
+        public Person(string name, int age, bool female)
+        {
+            this.name = name;
+            this.age = age;
+            this.female = female;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(name).Append(" (");
+            if (female)
+            {
+                sb.Append("f): ");
+            }
+            else
+            {
+                sb.Append("m): ");
+            }
+            sb.Append(age);
+            return sb.ToString();
+        }
+    }
+}
