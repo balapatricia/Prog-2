@@ -88,3 +88,67 @@ class Test {
         System.out.println(a.equals(b));
     }
 }
+
+
+
+
+
+___________________________________________
+
+public class Person {
+
+    static public final boolean MALE = false;
+    static public final boolean FEMALE = true;
+    private String name;
+    private int age;
+    private boolean female;
+
+    public Person(String name, int age, boolean female) {
+        this.name = name;
+        this.age = age;
+        this.female = female;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isFemale(){
+        return female;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if ( obj == null || !(obj instanceof Person)) {
+            return false;
+        }
+        Person tmp = (Person)obj;
+        return name.equals(tmp.getName()) && age == tmp.getAge() && female == tmp.isFemale();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append(" (");
+        if (female == FEMALE) {
+            sb.append("f): ");
+        }
+        else {
+            sb.append("m): ");
+        }
+        sb.append(age);
+        return sb.toString();
+    }
+}
