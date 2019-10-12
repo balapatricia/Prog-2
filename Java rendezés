@@ -132,7 +132,7 @@ public class Rendezes {
 
 
 
-# az új Person osztály (már tartalmazza a rendezéshez szükséges interfész implementációkat (minden másban az eredeti)
+# az új Person osztály (már tartalmazza a rendezéshez szükséges interfész implementációkat (minden másban az eredeti))
 
 import java.util.Comparator;
 
