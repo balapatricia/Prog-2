@@ -1,0 +1,226 @@
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.StringJoiner;
+import java.util.function.Function;
+
+public class Rendezes {
+
+    public static void main(String[] args) {
+
+        int[] t;                                     // referencia változó
+        int n[];
+        int[][] kt;
+        int[] m = {1, 2, 3, 4};                      // csak kezdőértékadásnál
+        t = new int[4];                              // 4 elemű tömb, nincs kezdőértéke, 0 értékek rendelődnek hozzá
+        System.out.println(Arrays.toString(t));
+        t = new int[]{3, 8, 4, 2, 5, 9, 7, 10, 6, 1};
+        //System.out.println(Arrays.toString(t));
+        //t = new int[6]{1,2,3,4,5,6};               // fordítási hiba, nem lehet egyszerre az elemszámot is megadni és az elemeket is felsorolni
+        String[] s = {"meggy", "citrom", "alma", "dinnye", "barack", "ananász", "eper", "dió"};
+        //System.out.println(Arrays.toString(s));
+
+
+        for (int i = 0; i < t.length; i++) {
+            System.out.println(t[i]);
+        }
+
+
+        System.out.println("---");
+        for (int item : t) {
+            System.out.println(item);
+        }
+
+        System.out.println("---");
+        for (int i = 0; i < t.length; i++) {
+            if (i > 0){
+                System.out.print("-");
+            }
+            System.out.print(t[i]);
+        }
+        System.out.println();
+
+
+        System.out.println("---");
+        boolean first = true;
+        for (int item : t) {
+            if (!first){
+                System.out.print("-");
+            }
+            else {
+                first = false;
+            }
+            System.out.print(item);
+        }
+        System.out.println();
+
+        System.out.println("---");
+        StringJoiner sj = new StringJoiner("-");
+        for (int item : t) {
+            sj.add(Integer.toString(item));
+        }
+        System.out.println(sj.toString());
+
+        Arrays.sort(t);
+        System.out.println(Arrays.toString(t));
+
+        Arrays.sort(s);
+        System.out.println(Arrays.toString(s));
+
+        Person[] pt = {
+                new Person("Teszt","Elek",34,Person.MALE),
+                new Person("Har","Mónika",45,Person.FEMALE),
+                new Person("Har","Mónika",36,Person.FEMALE),
+                new Person("Vicc","Elek",82,Person.MALE),
+                new Person("Minden","Áron",64,Person.MALE)};
+
+        System.out.println(Arrays.toString(pt));
+        Arrays.sort(pt);
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt,new Person.PersonComparatorbyNameAndAge());
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                int res = o1.getFirstName().compareTo(o2.getFirstName());
+                if (res != 0) {
+                    return res;
+                }
+                return Integer.compare(o1.getAge(),o2.getAge());
+            }
+        });
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, (a, b) -> {
+            int res = a.getFirstName().compareTo(b.getFirstName());
+            if (res != 0) {
+                return res;
+            }
+            return Integer.compare(a.getAge(),b.getAge());
+        });
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, (a,b)-> a.getFirstName().compareTo(b.getFirstName()));      //ha csak egy utasítást akarunk végrehajtani, elhagyható a blokk
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, Comparator.comparing(new Function<Person, Integer>() {      // comparator objektumot ad vissza
+
+            @Override
+            public Integer apply(Person person) {
+                return person.getAge();
+            }
+        }));
+        System.out.println(Arrays.toString(pt));
+
+
+
+        Arrays.sort(pt, Comparator.comparing(a -> a.getAge()));
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, Comparator.comparing(Person::getAge, Comparator.reverseOrder()));      //metódus referencia, ha a lambda kif. jobb oldalán egyetlen kif. szereoel, megadható ilyen formátumban is
+        System.out.println(Arrays.toString(pt));
+
+        Arrays.sort(pt, Comparator.comparing(Person::getFirstName).thenComparing(Person::getAge));
+        System.out.println(Arrays.toString(pt));
+
+        pt = Arrays.stream(pt).sorted().toArray(Person[]::new);
+        System.out.println(Arrays.toString(pt));
+
+    }
+}
+
+
+
+# az új Person osztály (már tartalmazza a rendezéshez szükséges interfész implementációkat (minden másban az eredeti)
+
+import java.util.Comparator;
+
+public class Person implements Comparable<Person>{
+
+    static public boolean MALE = false;
+    static public boolean FEMALE = true;
+    private String firstName;
+    private String lastName;
+    private int age;
+    private boolean female;
+
+    public Person(String firstName, String lastName, int age, boolean female) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.female = female;
+    }
+
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+
+    public boolean isFemale() {
+        return female;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Person)){
+            return false;
+        }
+        Person tmp = (Person)obj;
+        return firstName.equals(tmp.getFirstName()) && lastName.equals(tmp.getLastName()) && age == tmp.getAge() && female == tmp.isFemale();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append(" ").append(lastName).append(" (");
+        if (female == FEMALE) {
+            sb.append("f): ");
+        }
+        else {
+            sb.append("m): ");
+        }
+        sb.append(age);
+        return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return firstName.compareTo(o.firstName);
+    }
+
+    static class PersonComparatorbyNameAndAge implements Comparator<Person> {
+
+        @Override
+        public int compare(Person o1, Person o2) {
+            int res = o1.getFirstName().compareTo(o2.getFirstName());
+            if (res != 0) {
+                return res;
+            }
+            return Integer.compare(o1.getAge(),o2.getAge());
+        }
+    }
+}
+
+
