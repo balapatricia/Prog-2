@@ -104,7 +104,7 @@ public class Rendezes {
         Arrays.sort(pt, (a,b)-> a.getFirstName().compareTo(b.getFirstName()));      //ha csak egy utasítást akarunk végrehajtani, elhagyható a blokk
         System.out.println(Arrays.toString(pt));
 
-        Arrays.sort(pt, Comparator.comparing(new Function<Person, Integer>() {      // comparator objektumot ad vissza
+        Arrays.sort(pt, Comparator.comparing(new Function<Person, Integer>() {     
 
             @Override
             public Integer apply(Person person) {
