@@ -1,0 +1,112 @@
+// A gyakorlatokon a Person osztályt használtuk, ebben a példában egy új Student osztályt használunk, így egyben van minden.
+
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
+class Student implements Comparable<Student>{
+    
+    protected String name;
+    protected String neptunCode;
+    protected int age;
+
+    public Student(String name, String neptunCode, int age) {
+        this.name = name;
+        this.neptunCode = neptunCode;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + neptunCode + ") " + "(" + age + ")";
+    }
+
+    @Override
+    public int compareTo(Student s) {
+        return name.compareTo(s.name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        System.out.println("equals: "+ this + " " + obj.toString());
+        if (obj == null || !(obj instanceof Student)) {
+            return false;
+        }
+        Student s = (Student) obj;
+        if (neptunCode.equals(s.neptunCode)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        System.out.println("hashCode: " + this);
+        return name.length();                                   // ha az új elem hossza különbözik a korábbiaktól csak a hashcode hívódik meg, ha bármelyikkel megegyezne akkor az equals is meg fog hívódni
+    }
+}
+
+public class Test {
+
+    public static void main(String[] args) { 
+    
+        Set<Integer> s = new HashSet<>();                     // az Integer osztály hashCode metódusa miatt, inteket tartalmazó HashSet elemei rendezve lesznek           
+        s.add(1);                                           
+        s.add(5);                                           
+        s.add(3);
+        s.add(6);
+        s.add(2);
+        s.add(4);
+        System.out.println(s);
+        
+        
+        Set<String> d = new HashSet<>();
+        d.add("vilmoskörte");
+        d.add("eper");
+        d.add("alma");
+        d.add("görögdinnye");
+        d.add("barack");
+        d.add("eper");
+        d.add("mangó");
+        d.add("narancs");
+        d.add("meggy");
+        System.out.println(d);
+        for (String item:d) {
+            System.out.println(item);
+        }
+        
+        
+        Set<Student> st = new HashSet<>();
+        st.add(new Student("Anna","ABC123",21));
+        st.add(new Student("Béla","DEF456",23));
+        st.add(new Student("Dénes","GHI789",22));
+        st.add(new Student("Elemér","JKL123",22));
+        st.add(new Student("Cecil","MNO456",21));
+        st.add(new Student("Anna","HZJ453",22));
+        st.add(new Student("Anna","ABC123",21));
+        System.out.println(st);
+        
+
+        Set<Student> stt = new TreeSet<>(new Comparator<Student>() {        // TreeSet esetén a rendezés módja paraméterben is átadható, például egy névtelen osztály használatával
+            @Override
+            public int compare(Student o1, Student o2) {
+                int res = Integer.compare(o1.age,o2.age);
+                if (res != 0) {
+                    return res;
+                }
+                return o1.neptunCode.compareTo(o2.neptunCode);
+            }
+        });
+        stt.add(new Student("Anna","ABC123",21));
+        stt.add(new Student("Béla","DEF456",23));
+        stt.add(new Student("Dénes","GHI789",22));
+        stt.add(new Student("Elemér","JKL123",22));
+        stt.add(new Student("Cecil","MNO456",21));
+        stt.add(new Student("Anna","HZJ453",22));
+        stt.add(new Student("Anna","ABC123",21));
+        System.out.println(stt);
+
+    }
+}
