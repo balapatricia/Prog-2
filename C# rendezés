@@ -1,0 +1,210 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+    class Tomb
+    {
+        static int IntReverseOrder(int x, int y)            // int-eket tartalmazó tömb visszafelé rendezéséhez saját metódust írtunk
+        {
+            return y.CompareTo(x);
+        }
+
+        static void Main(string[] args)
+        {
+            int[] t;
+            int[] n = { 1, 2, 3 };
+            int[,] kt;
+            t = new int[4];
+            t = new int[] { 3, 2, 5, 1 };
+
+            Array.Sort(t);
+            Console.WriteLine(string.Join(", ", t));
+            
+            
+            Array.Sort(t, Tomb.IntReverseOrder);              // ha fordított sorrendet szeretnénk int-es tömb esetén (ugyan így működik más típusoknál is (értelemszerűen másik saját metódussal))
+            Array.Sort(t, delegate (int x, int y)             // delegálttal is megvalósítható
+            {
+                return y.CompareTo(x);
+            });
+            Array.Sort(t, (x, y) => y.CompareTo(x));          // sőt az egészet lerövidíthetjük egy lambda kifejezésre is
+            string[] st;
+
+
+
+            st = new string[] { "barack", "dió", "alma", "görögdinnye" };
+            Console.WriteLine(string.Join(", ", st));
+            
+            Array.Sort(st);
+            Console.WriteLine(string.Join(", ", st));
+
+
+            Person[] pt = { new Person("Márk", 44, false),
+                                new Person("Anikó", age: 36, true),
+                                new Person("Panna",21,true),
+                                new Person("János",43,false),
+                                new Person("Noémi",40,true),
+                                new Person("Betti",23,true),
+                                new Person("Betti",21,true)};
+            Array.Sort(pt);
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+            IComparer<Person> pcna = new PersonComparableByNameAndAge();        // helyettesíthetőség példája, a PersonCompareByNAmeAndAge implementálja az IComparer-t, emiatt helyettesítheti őt (ugye az Array.Sort ebben az esetben egy IComparer-t vár második paraméterként)
+            Array.Sort(pt, pcna);
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+            Array.Sort(pt, pcna);                                               
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+            Comparison<Person> cp = Person.CompareByNameAndAge;
+            Array.Sort(pt, cp);                                                 // ebben az esetben a második paraméter egy Comparison típusú referencia - maga a comparison egy delegált típus, ami referencia típus, a tevékenységet a delegáltra bízom 
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+            Array.Sort(pt, Person.CompareByNameAndAge);                         
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+
+            Array.Sort(pt, delegate (Person a, Person b)                        // ha lusta vagyok metódus nevet kitalálni, és csak egyszer szeretnék rendezni helyben létrehozhatok egy delegáltat (ez comparison típusú lesz)
+            {
+                return a.Age.CompareTo(b.Age);
+            });
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+            Comparison<Person> cpp = delegate (Person a, Person b)              // anonim metódus
+            {
+                return b.Age.CompareTo(a.Age);
+            };
+            Array.Sort(pt, cpp);
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+            Array.Sort(pt, (Person a, Person b) =>                              // lambda kifejezés
+            {
+                return b.Name.CompareTo(a.Name);
+            });
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+            Array.Sort(pt, (a, b) => b.Name.CompareTo(a.Name));                 // lambda utasítás rövid alakja, ha csak 1 utasítás áll a lambda kifejezésben
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+
+            Func<Person, string> f = delegate (Person a) { return a.Name; };
+            // LINQ
+            var res = pt.OrderBy(f);                                            
+            Console.WriteLine(string.Join(", ", res));
+
+
+            pt = pt.OrderBy(a => a.Name).ToArray();                             // a delegáltat lambdára cseréltük
+            Console.WriteLine(string.Join(", ", (object[])pt));
+
+
+
+            var tmp = from p in pt orderby p.Name select p;                    
+            Console.WriteLine(string.Join(", ", tmp));
+
+            var cucc = (from p in pt orderby p.Name select new { p.Name, p.Age }).ToArray();
+            Console.WriteLine(string.Join(", ", (object[])cucc));
+
+        }
+    }
+    
+    
+    
+    
+// A kapcsolódó Person osztályunk kiegészítve a rendezéshez szükséges metódusokkal
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+  
+namespace HelloWorld
+{
+    class Person:IComparable<Person>
+    {
+
+        public string Name { get; set; }
+
+        public int Age { get; set; }
+
+        public bool Female { get; }
+
+        public Person(string name, int age, bool female)
+        {
+            Name = name;
+            Age = age;
+            Female = female;
+        }
+
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Name).Append(" (");
+            if (Female)
+            {
+                sb.Append("f): ");
+            }
+            else
+            {
+                sb.Append("m): ");
+            }
+            sb.Append(Age);
+            return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Console.WriteLine("Equals: " + this + " + " + obj);
+            Person tmp = obj as Person;
+            if (tmp == null)
+            {
+                return false;
+            }
+            return Name == tmp.Name && Age == tmp.Age && Female == tmp.Female;
+        }
+
+        public int CompareTo(Person other)
+        {
+            return Age.CompareTo(other.Age);
+        }
+
+        public static int CompareByNameAndAge(Person x, Person y)           //Comparison típus egy delegáció - egy metódust reprezentál ami két objektumot képes összehasonlítani (névtelen osztály helyett)
+        {
+            int res = x.Name.CompareTo(y.Name);
+            if (res != 0)
+            {
+                return res;
+            }
+            return x.Age.CompareTo(y.Age);
+        }
+    }
+
+    class PersonComparableByNameAndAge : IComparer<Person>
+    {
+        public int Compare(Person x, Person y)
+        {
+            int res = x.Name.CompareTo(y.Name);
+            if (res != 0)
+            {
+                return res;
+            }
+            return x.Age.CompareTo(y.Age);
+        }
+    }
+}
+  
