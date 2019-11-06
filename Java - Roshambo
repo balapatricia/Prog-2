@@ -1,0 +1,197 @@
+//https://it.inf.unideb.hu/honlap/prog2/201112-1-pti-gyakorlo-9
+
+import java.sql.SQLOutput;
+import java.util.*;
+
+
+public class Game {
+
+    static Map<String, Result> map = new TreeMap<>();
+    static int counter = 0;
+    private static final String NEW_LINE = System.lineSeparator();
+    
+
+    Person playerA;
+    Person playerB;
+    List<Round> rounds;
+
+    static {                                            
+        map.put("Kamen",0;
+        map.put("Rock",0);
+        map.put("Pierre",0);
+        map.put("Stein",0);
+        map.put("Ko",0;
+        map.put("Koe",0);
+        map.put("Sasso",0);
+        map.put("Roccia",0);
+        map.put("Guu",0);
+        map.put("Kamien",0);
+        map.put("Piedra",0);
+        map.put("Nuzky",1);
+        map.put("Scissors",1);
+        map.put("Ciseaux",1);
+        map.put("Schere",1);
+        map.put("Ollo",1);
+        map.put("Olloo",1);
+        map.put("Forbice",1);
+        map.put("Choki",1);
+        map.put("Nozyce",1);
+        map.put("Tijera",1);
+        map.put("Papir",2);
+        map.put("Paper",2);
+        map.put("Feuille",2);
+        map.put("Papier",2);
+        map.put("Papir",2);
+        map.put("Carta",2);
+        map.put("Rete",2);
+        map.put("Paa",2);
+        map.put("Papier",2);
+        map.put("Papel",2);
+    }
+
+    public Game(Person playerA, Person playerB, List<Round> rounds) {
+        this.playerA = playerA;
+        this.playerB = playerB;
+        this.rounds = rounds;
+        counter++;
+
+        for (Round item:rounds) {
+            Result a = map.get(item.getSymbolA());
+            Result b = map.get(item.getSymbolB());
+            if (a == 0 && b == 1 || a == 1 && b == 2 || a == 2 && b == 0 ){
+                playerA.addPoint();
+            }
+            else if (b == 0 && a == 1 || b == 1 && a == 2 || b == 2 && a == 0){
+                playerB.addPoint();
+            }
+        }
+    }
+
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Game #").append(counter).append(":").append(NEW_LINE);
+        sb.append(playerA.getName()).append(": ").append(playerA.getPoints()).append(" point");
+        if (playerA.getPoints() != 1) {
+            sb.append("s");
+        }
+        sb.append(NEW_LINE);
+        sb.append(playerB.getName()).append(": ").append(playerB.getPoints()).append(" point");
+        if (playerB.getPoints() != 1) {
+            sb.append("s");
+        }
+        sb.append(NEW_LINE);
+        if (playerA.getPoints() == playerB.getPoints()) {
+            sb.append("TIED GAME");
+        }
+        else {
+            sb.append("WINNER: ");
+            if (playerA.getPoints() > playerB.getPoints()) {
+                sb.append(playerA.getName());
+            }
+            else {
+                sb.append(playerB.getName());
+            }
+        }
+        sb.append(NEW_LINE);
+        return sb.toString();
+    }
+}
+
+
+class Person implements Comparable<Person> {
+    private String name, nationality;
+    private int points;
+
+    public int getPoints() { return points; }
+    public String getName() { return name; }
+    public String getNationality() { return nationality; }
+
+    public Person(String nationality, String name) {
+        this.name = name;
+        this.nationality = nationality;
+    }
+
+    public void addPoint() { ++points; }
+
+    public int compareTo(Person o) {
+        if (o == null) { throw new NullPointerException("Parameter is null reference."); }
+        return this.points - o.points;
+    }
+}
+
+
+
+
+class Round {
+    private String symbolA, symbolB;
+
+    public Round(String symbolA, String symbolB) {
+        this.symbolA = symbolA;
+        this.symbolB = symbolB;
+    }
+
+    public String getSymbolA() { return symbolA; }
+    public String getSymbolB() { return symbolB; }
+}
+
+
+
+
+class Main {
+    public static void main(String[] args) {
+        System.out.println(Result.ROCK.ordinal());
+        Arrays.stream(Result.values()).forEach(p -> {
+            System.out.println(p.name()+": "+p.ordinal());
+        });
+        Scanner sc = new Scanner(System.in), ssc;
+        int state = 0;
+        String line, nationality, name;
+        Person p1 = null, p2 = null;
+        List<Round> l = null;
+        while (state != 99) {
+            line = sc.nextLine();
+            switch (state) {
+                case 0:
+                    if (line.equals(".")) {
+                        state = 99;
+                    } else {
+                        l = new ArrayList<>();
+                        ssc = new Scanner(line);
+                        nationality = ssc.next();
+                        name = ssc.next();
+                        p1 = new Person(nationality, name);
+                        state = 1;
+                    }
+                    break;
+                case 1:
+                    ssc = new Scanner(line);
+                    nationality = ssc.next();
+                    name = ssc.next();
+                    p2 = new Person(nationality, name);
+                    state = 2;
+                    break;
+                case 2:
+                    switch (line) {
+                        case ".":
+                            System.out.println(new Game(p1, p2, l));
+                            state = 99;
+                            break;
+                        case "-":
+                            System.out.println(new Game(p1, p2, l));
+                            state = 0;
+                            break;
+                        default:
+                            ssc = new Scanner(line);
+                            String symbolOne = ssc.next();
+                            String symbolTwo = ssc.next();
+                            l.add(new Round(symbolOne, symbolTwo));
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+}
