@@ -1,0 +1,56 @@
+// https://progcont.hu/progcont/100219/?pid=201103
+
+import java.util.*;
+
+public class Trip {
+
+    private static class Data implements Comparable<Data>{
+
+        private String name;
+        private int km;
+
+        public Data(String name, int km) {
+            this.name = name;
+            this.km = km;
+        }
+
+        @Override
+        public int compareTo(Data o) {
+            int res = Integer.compare(o.km,km);
+            if (res != 0){
+                return res;
+            }
+            return name.compareTo(o.name);
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+    public static void main(String[] args) {
+
+        Map<String, Set<Data>> map = new TreeMap<>();
+
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNextLine()) {
+            String[] datas = sc.nextLine().split(";");
+            for (int i = 1; i < datas.length; i++) {
+                String[] tripkm = datas[i].split(":");
+                Set<Data> value = map.get(tripkm[0]);
+                if (value == null) {
+                    value = new TreeSet<>();
+                    map.put(tripkm[0], value);
+                }
+                value.add(new Data(datas[0], Integer.parseInt(tripkm[1])));
+            }
+        }
+        for (Map.Entry<String, Set<Data>> entry : map.entrySet()) {
+            StringJoiner sj = new StringJoiner(", ");
+            for (Data item : entry.getValue()) {
+                sj.add(item.toString());
+            }
+            System.out.println(entry.getKey() + " (" + entry.getValue().size() + "): "+sj.toString());
+        }
+    }
+}
