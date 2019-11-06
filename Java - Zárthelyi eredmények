@@ -1,0 +1,40 @@
+//https://progcont.hu/progcont/100306/?pid=201391
+
+import java.util.*;
+import java.util.function.BiConsumer;
+
+public class Progcont {
+
+    public static void main(String[] args) {
+
+        Map<String, Set<Integer>> map = new TreeMap<>();
+
+        Scanner sc = new Scanner(System.in);
+        while (sc.hasNextLine()) {
+            String[] datas = sc.nextLine().split(";");
+            Set<Integer> value = map.get(datas[0]);
+            if (value == null) {
+                value = new TreeSet<>();
+                map.put(datas[0],value);
+            }
+            if (datas[2].equals("PASS")) {
+                value.add(Integer.parseInt(datas[1]));
+            }
+        }
+//        map.forEach(new BiConsumer<String, Set<Integer>>() {
+//            @Override
+//            public void accept(String s, Set<Integer> integers) {
+//                System.out.printf("%s: %s%n",s,integers.isEmpty()?"NOTHING":String.format("%s",integers).replaceAll("[\\[\\]]",""));
+//            }
+//        });
+
+        map.forEach((s,integers)->System.out.printf("%s: %s%n",s,integers.isEmpty()?"NOTHING":String.format("%s",integers).replaceAll("[\\[\\]]","")));
+
+//        for (Map.Entry<String, Set<Integer>> item : map.entrySet()){
+//            System.out.printf("%s: %s%n",item.getKey(), item.getValue().isEmpty()?"NOTHING":String.format("%s", item.getValue()).replaceAll("[\\[\\]]",""));
+//        }
+    }
+}
+
+
+// A kiíratás úgy is elvégezhető, mint a Túrastatisztika feladatban, itt más, rövidebb alternatívákat néztünk meg.
