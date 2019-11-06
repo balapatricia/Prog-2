@@ -1,0 +1,182 @@
+//https://it.inf.unideb.hu/honlap/prog2/201112-1-pti-gyakorlo-9
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Roshambo
+{
+
+    class Game
+    {
+        private Person playerA;
+        private Person playerB;
+        private IList<Round> rounds;
+
+        private static int counter = 0;
+        private static IDictionary<string, int> map = new Dictionary<string, int>();               //itt nem lehet gyémántoperátort használni, ki kell írni a generikus típusparamétereket
+        private static readonly string NEW_LINE = Environment.NewLine; 
+
+        static Game()
+        {
+            //map.Add("Kamen",0);
+            map["Kamen"] = 0;
+            map["Rock"] = 0;
+            map["Pierre"] = 0;
+            map["Stein"] = 0;
+            map["Ko"] = 0;
+            map["Koe"] = 0;
+            map["Sasso"] = 0;
+            map["Roccia"] = 0;
+            map["Guu"] = 0;
+            map["Kamien"] = 0;
+            map["Piedra"] = 0;
+            map["Papir"] = 1;
+            map["Paper"] = 1;
+            map["Feuille"] = 1;
+            map["Papier"] = 1;
+            map["Carta"] = 1;
+            map["Rete"] = 1;
+            map["Paa"] = 1;
+            map["Papel"] = 1;
+            map["Nuzky"] = 2;
+            map["Scissors"] = 2;
+            map["Ciseaux"] = 2;
+            map["Schere"] = 2;
+            map["Ollo"] = 2;
+            map["Olloo"] = 2;
+            map["Forbice"] = 2;
+            map["Choki"] = 2;
+            map["Nozyce"] = 2;
+            map["Tijera"] = 2;
+        }
+
+
+
+        public Game(Person playerA, Person playerB, IList<Round> rounds)
+        {
+ 
+            this.rounds = rounds;
+            counter++;
+
+            foreach (Round item in rounds)
+            {
+                int a = map[item.SymbolA];
+                int b = map[item.SymbolB];
+                
+                if (a == 0 && b == 2 || a == 1 && b == 0 || a == 2 && b == 1)
+                {
+                    playerA.Points++;
+                }
+                else if (b == 0 && a == 2 || b == 1 && a == 0 || b == 2 && a == 1)
+                {
+                    playerB.Points++;
+                }
+            }
+
+            this.playerA = playerA;
+            this.playerB = playerB;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Game #").Append(counter).Append(":").Append(NEW_LINE);
+            sb.Append(playerA.Name).Append(": ").Append(playerA.Points).Append(" point");
+            if (playerA.Points != 1)
+            {
+                sb.Append("s");
+            }
+            sb.Append(NEW_LINE);
+            sb.Append(playerB.Name).Append(": ").Append(playerB.Points).Append(" point");
+            if (playerB.Points != 1)
+            {
+                sb.Append("s");
+            }
+            sb.Append(NEW_LINE);
+            if (playerA.Points == playerB.Points)
+            {
+                sb.Append("TIED GAME");
+            }
+            else
+            {
+                sb.Append("WINNER: ");
+                if (playerA.Points > playerB.Points)
+                {
+                    sb.Append(playerA.Name);
+                }
+                else
+                {
+                    sb.Append(playerB.Name);
+                }
+            }
+            sb.Append(NEW_LINE);
+            return sb.ToString();
+        }
+
+        
+    }
+
+
+    struct Person : IComparable<Person>
+    {
+        readonly string name, nationality;
+        int points;
+
+        public string Name { get { return name; } }
+        public string Nationality { get { return nationality; } }
+        public int Points { get { return points; } set { points = value; } }
+
+        public Person(string nationality, string name)
+        {
+            this.name = name;
+            this.nationality = nationality;
+            this.points = 0;
+        }
+
+        public int CompareTo(Person other) { return this.Points - other.Points; }
+    }
+
+    struct Round                                            //kevésszer módosuló, kevés adatot érdemes itt tartani - gyorsan lehessen másolni pl ha átadjuk paraméternek (érték típusú)
+    {
+        readonly string symbolA, symbolB;
+
+        public String SymbolA { get { return symbolA; } }
+        public String SymbolB { get { return symbolB; } }
+
+        public Round(string symbolA, string symbolB)
+        {
+            this.symbolA = symbolA;
+            this.symbolB = symbolB;
+        }
+    }
+
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string line;
+            while ((line = Console.ReadLine()) != null)
+            {
+                String[] sa = line.Split();
+                Person playerA = new Person(sa[0], sa[1]);
+                line = Console.ReadLine();
+                sa = line.Split();
+                Person playerB = new Person(sa[0], sa[1]);
+                IList<Round> rounds = new List<Round>();
+                while (true)
+                {
+                    line = Console.ReadLine();
+                    if (line == "." || line == "-")
+                    {
+                        break;
+                    }
+                    sa = line.Split();
+                    rounds.Add(new Round(sa[0], sa[1]));
+                }
+                Console.WriteLine(new Game(playerA, playerB, rounds));
+            }
+        }
+    }
+}
