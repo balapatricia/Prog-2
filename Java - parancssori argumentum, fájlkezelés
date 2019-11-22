@@ -1,0 +1,114 @@
+import java.io.*;
+import java.util.Formatter;
+import java.util.Scanner;
+
+public class FileTest {
+
+    public static void main(String[] args) {                //a main metódus paraméterei a parancssori argumentumok - tömb - String típusúak, alakíthatók
+        System.out.println(args.length);                    //általában a program futásához szükséges állományokat adjuk meg parancssori argumentumként
+        int sum = 0;
+        for (String item : args) {
+            try {
+                sum += Integer.parseInt(item);
+            }
+            catch (NumberFormatException nfe){
+                System.out.printf("%s: %s%n", nfe.getMessage(), "ezt most kihagyom.");
+            }
+        }
+        System.out.println(sum);
+    }
+
+    public static void main(String[] args) {
+        File fout = new File("proba.txt");
+        Formatter fmt = null;
+        try {
+            fmt = new Formatter(fout);
+            fmt.format("Ez egy teszt.");
+            fmt.format("Ez is egy teszt.");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            if (fmt != null){
+                fmt.close();
+            }
+        }
+
+
+        File myfile = null;
+        if (args.length != 0){
+            myfile = new File(args[0]);
+        }
+        else {
+            myfile = new File("proba.txt");
+        }
+        long start = System.currentTimeMillis();
+        try {
+            Scanner sc = new Scanner(myfile);
+            while (sc.hasNextLine()){
+                String line = sc.nextLine();
+                System.out.println(line);
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        long stop = System.currentTimeMillis();
+        System.out.println(stop-start);
+    }
+
+
+    public static void main(String[] args) {
+        try (Formatter fmt = new Formatter(new File("proba.txt")) ){            //lezárja a fájlt -> try-with-resources (ha a zárójelek közé olyan dolgokat írunk, amik megvalósítják a closeable vagy az autocloseable interfészt
+            fmt.format("Ez egy teszt.");
+            fmt.format("Ez is egy teszt.");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        File myfile = null;
+        if (args.length != 0){
+            myfile = new File(args[0]);
+        }
+        else {
+            myfile = new File("proba.txt");
+        }
+        try (Scanner sc = new Scanner(myfile)){
+            while (sc.hasNextLine()){
+                System.out.println(sc.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("proba.txt"))) ){
+            for (int i = 0; i < 1000001; i++){
+                bw.write(String.format("%d%n",i));
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        File myfile = null;
+        if (args.length != 0){
+            myfile = new File(args[0]);
+        }
+        else {
+            myfile = new File("proba.txt");
+        }
+        long start = System.currentTimeMillis();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(myfile)))){
+            String sor;
+            while ( (sor = br.readLine()) != null){
+//                System.out.println(sor);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        long stop = System.currentTimeMillis();
+        System.out.println(stop-start);
+    }
+}
