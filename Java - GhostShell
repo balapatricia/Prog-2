@@ -1,0 +1,216 @@
+// Loader osztály
+
+package shell;
+import shell.Shell;
+
+public class Loader {
+
+    public static Shell load(){
+        return new GhostsShell();
+    }
+}
+
+
+// saját "okos" shell
+
+package shell;
+
+import java.io.*;
+import java.util.Formatter;
+
+public class GhostsShell extends Shell {
+
+    boolean isday = false;
+    boolean issinging;
+    boolean sang;
+    boolean ishooting;
+    boolean hooted;
+    boolean islaughing;
+    boolean laughed;
+    boolean openwindow = false;
+    boolean playorgan = false;
+    StringBuilder game = new StringBuilder();
+    int count = 0;
+    private static final String NEW_LINE = System.lineSeparator();
+
+    private String status() {
+        StringBuilder sb = new StringBuilder();
+        if (count == 3) {
+            sb.append("Három éjszaka nyugodtan aludtál! Megnyerted a jatákot!").append(NEW_LINE);
+        } else {
+            sb.append(isday ? "Nappal van. " : "Éjjel van. ");
+            if (!isday) {
+                sb.append(issinging ? "Éneklő énekel. " : "Éneklő csendben van. ")
+                        .append(ishooting ? "Huhogó huhog. " : "Huhogó csendben van. ")
+                        .append(islaughing ? "Kacagó kacag." : "Kacagó csendben van.").append(NEW_LINE);
+            } else {
+                sb.append(issinging ? "Éneklő énekelt. " : "Éneklő csendben volt. ")
+                        .append(ishooting ? "Huhogó huhogott. " : "Huhogó csendben volt. ")
+                        .append(islaughing ? "Kacagó kacagott. " : "Kacagó csendben volt. ");
+                sb.append(openwindow ? "Az ablak nyitva van. " : "Az ablak csukva van. ")
+                        .append(playorgan ? "Ma már zongoráztál." : "Ma még nem zongoráztál.").append(NEW_LINE);
+            }
+        }
+        return sb.toString();
+    }
+
+    public GhostsShell() {
+
+        addCommand(new Command("new") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1 || !strings[0].equals("initial")) {
+                    return false;
+                }
+                count = 0;
+                issinging = true;
+                ishooting = true;
+                islaughing = true;
+                format(status());
+                game.append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("new") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 0) {
+                    return false;
+                }
+                count = 0;
+                issinging = isSinging();
+                ishooting = isHooting();
+                islaughing = isLaughing();
+                format(status());
+                game.append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("print") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 0) {
+                    return false;
+                }
+                format(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("open") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1 || !strings[0].equals("window")) {
+                    return false;
+                }
+                if (count == 3 || !isday || openwindow) {
+                    return false;
+                }
+                openwindow = true;
+                format(status());
+                game.append("Kinyitottad az ablakot.").append(NEW_LINE).append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("close") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1 || !strings[0].equals("window")) {
+                    return false;
+                }
+                if (count == 3 || !isday || !openwindow) {
+                    return false;
+                }
+                openwindow = false;
+                format(status());
+                game.append("Becsuktad az ablakot.").append(NEW_LINE).append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("play") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1 || !strings[0].equals("organ")) {
+                    return false;
+                }
+                if (count == 3 || !isday || playorgan) {
+                    return false;
+                }
+                playorgan = true;
+                format(status());
+                game.append("Zongoráztál.").append(NEW_LINE).append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("go") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 2 || !strings[0].equals("to") || !strings[1].equals("bed")) {
+                    return false;
+                }
+                if (count == 3 || !isday) {
+                    return false;
+                }
+                isday = false;
+                sang = issinging;
+                hooted = ishooting;
+                laughed = islaughing;
+                issinging = (playorgan && islaughing == false) ? !sang : sang;
+                islaughing = (!openwindow) ? hooted : !hooted;
+                ishooting = laughed;
+                format(status());
+                game.append("Elmentél aludni.").append(NEW_LINE).append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("get") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1 || !strings[0].equals("up")) {
+                    return false;
+                }
+                if (isday) {
+                    return false;
+                }
+                if (!ishooting && !islaughing && !issinging) {
+                    count++;
+                }
+                isday = true;
+                playorgan = false;
+                format(status());
+                game.append("Felkeltél.").append(NEW_LINE).append(status());
+                return true;
+            }
+        });
+
+        addCommand(new Command("save") {
+
+            @Override
+            public boolean execute(String... strings) {
+                if (strings.length != 1) {
+                    return false;
+                }
+                try (Formatter fmt = new Formatter(new File(strings[0]))){
+                    fmt.format(game.toString());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        });
+    }
+}
