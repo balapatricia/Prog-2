@@ -61,9 +61,9 @@ public class GhostMethod extends AbstractGhostMethod {
         }
         gh.isstarted = true;
         gh.count = 0;
-//        gh.issinging = Shell.isSinging();
-//        gh.ishooting = Shell.isHooting();
-//        gh.islaughing = Shell.isLaughing();
+        gh.issinging = true;
+        gh.ishooting = true;
+        gh.islaughing = true;
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e) {
