@@ -1,0 +1,386 @@
+// az absztarkt osztály
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JumpingFrogTest
+{
+    public abstract class AbstractClass
+    {
+        public abstract bool NewGame(Frogs fr, string[] args);
+
+        public abstract bool NewGameWithParameter(Frogs fr, string[] args);
+
+        public abstract bool XJump(Frogs fr, string[] args);
+
+        public abstract bool XWalk(Frogs fr, string[] args);
+
+        public abstract bool OJump(Frogs fr, string[] args);
+
+        public abstract bool OWalk(Frogs fr, string[] args);
+
+    }
+}
+
+
+// a hozzá szükséges Frog osztály
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JumpingFrogTest
+{
+    public class Frogs
+    {
+        public bool started = false;
+        public int db;
+        public string[] status;
+
+        public Frogs()
+        {
+        }
+    }
+}
+
+
+// a megvalósító osztály
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JumpingFrogTest
+{
+    public class JumpFrogsMethods : AbstractClass
+    {
+
+        static void Main(string[] args)
+        {
+
+        }
+
+        public override bool NewGame(Frogs jf, string[] args)
+        {
+            if (args.Length != 0)
+            {
+                return false;
+            }
+            jf.started = true;
+            jf.db = 3;
+            jf.status = new string[jf.db * 2 + 1];
+            for (int i = 0, j = jf.db * 2; i < j; i++, j--)
+            {
+                jf.status[i] = "X";
+                jf.status[j] = "O";
+            }
+            jf.status[jf.db] = "_";
+            return true;
+        }
+
+        public override bool NewGameWithParameter(Frogs jf, string[] args)
+        {
+            int res;
+            if (args.Length != 1)
+            {
+                return false;
+            }
+            int.TryParse(args[0], out res);
+            if (res == null || res <= 0)
+            {
+                return false;
+            }
+            jf.started = true;
+            jf.db = int.Parse(args[0]);
+            jf.status = new string[jf.db * 2 + 1];
+            for (int i = 0, j = jf.db * 2; i < j; i++, j--)
+            {
+                jf.status[i] = "X";
+                jf.status[j] = "O";
+            }
+            jf.status[jf.db] = "_";
+            return true;
+        }
+
+        public override bool OJump(Frogs jf, string[] args)
+        {
+            if (args.Length != 1 || !(args[0].Equals("jump")))
+            {
+                return false;
+            }
+            for (int i = 2; i < jf.status.Length; i++)
+            {
+                if (jf.status[i].Equals("O") && jf.status[i - 1].Equals("X") && jf.status[i - 2].Equals("_"))
+                {
+                    jf.status[i - 2] = "O";
+                    jf.status[i] = "_";
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool OWalk(Frogs jf, string[] args)
+        {
+            if (args.Length != 1 || !(args[0].Equals("walk")))
+            {
+                return false;
+            }
+            for (int i = 1; i < jf.status.Length; i++)
+            {
+                if (jf.status[i].Equals("O") && jf.status[i - 1].Equals("_"))
+                {
+                    jf.status[i] = "_";
+                    jf.status[i - 1] = "O";
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool XJump(Frogs jf, string[] args)
+        {
+
+            if (args.Length != 1 || !(args[0].Equals("jump")))
+            {
+                return false;
+            }
+            for (int i = 0; i < jf.status.Length - 2; i++)
+            {
+                if (jf.status[i].Equals("X") && jf.status[i + 1].Equals("O") && jf.status[i + 2].Equals("_"))
+                {
+                    jf.status[i] = "_";
+                    jf.status[i + 2] = "X";
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public override bool XWalk(Frogs jf, string[] args)
+        {
+            if (args.Length != 1 || !(args[0].Equals("walk")))
+            {
+                return false;
+            }
+            for (int i = 0; i < jf.status.Length - 1; i++)
+            {
+                if (jf.status[i].Equals("X") && jf.status[i + 1].Equals("_"))
+                {
+                    jf.status[i] = "_";
+                    jf.status[i + 1] = "X";
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+}
+
+
+// és a teszt osztályunk
+// a metódus névre jobb klikkelve, a create unit test opciót kiválasztva generáltatjuk
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using JumpingFrogTest;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace JumpingFrogTest.Tests
+{
+    [TestClass()]
+    public class JumpFrogsMethodsTests
+    {
+        [TestMethod()]
+        public void NewGameTest()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGame(new Frogs(), new string[] { });
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod()]
+        public void NewGameTest2()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGame(new Frogs(), new string[] { "valami" });
+            Assert.AreEqual(false, result);
+        }
+
+        [TestMethod()]
+        public void NewGameWithParameterTest()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGameWithParameter(new Frogs(), new string[] { "3" });
+            Assert.AreEqual(true, result);
+        }
+
+        [DataRow(new string[] { "3"},true)]
+        [DataTestMethod]
+        public void NewGameWithParameterTest2(string[] args, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGameWithParameter(new Frogs(), args);
+            Assert.AreEqual(expected, result);
+        }
+
+
+        [DataTestMethod]
+        [DynamicData(nameof(GetData),DynamicDataSourceType.Method)]
+        public void NewGameWithParameterTest3(string[] args, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGameWithParameter(new Frogs(), args);
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> GetData()
+        {
+            yield return new object[] { new string[] { "3" }, true };
+            yield return new object[] { new string[] { "valami" }, false };
+        }
+
+
+
+        [DataTestMethod]
+        [DynamicData(nameof(Data), DynamicDataSourceType.Property)]
+        public void NewGameWithParameterTest4(string[] args, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            bool result = jfm.NewGameWithParameter(new Frogs(), args);
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> Data
+        {
+            get
+            {
+                yield return new object[] { new string[] { "3" }, true };          //késleltetett hozzáférést biztosít
+                yield return new object[] { new string[] { }, false };
+                yield return new object[] { new string[] { "-1" }, false };
+            }
+        }
+
+
+// a Data\data.csv az állomány elérési útvonala és neve
+// ne felejtsük el a Properties fülön átállítani a Copy to Output Directory-t Copy if newer-re állítani
+// és a file/save..as lehetőségnél a kódolást without signiture lehetőségre átállítani, hogy megfelelően tudjunk az oszlopnevekre hivatkozni
+
+
+        public TestContext TestContext { get; set; }
+
+        [DataTestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV",
+            @"Data\data.csv",
+            "data#csv", DataAccessMethod.Sequential)]
+        public void NewGameWithParameterTest4()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            string parameters = Convert.ToString(TestContext.DataRow["parameters"].ToString());
+            string[] args = parameters.Split(':');
+            bool expected = Convert.ToBoolean(TestContext.DataRow["expected"].ToString());
+            bool result = jfm.NewGameWithParameter(new Frogs(), args);
+            Assert.AreEqual(expected, result);
+        }
+
+
+
+
+        [TestMethod()]
+        public void OWalkTest()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            bool result = jfm.OWalk(fr,new string[] { "walk"});
+            Assert.AreEqual(true, result);
+        }
+
+        [TestMethod()]
+        public void OWalkTest2()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            bool result = jfm.OWalk(fr, new string[] { "walk","run" });
+            Assert.AreEqual(false, result);
+        }
+
+        [DataRow(new string[] { "walk" }, true)]
+        [DataRow(new string[] { "walk", "run" }, false)]
+        [DataTestMethod]
+        public void OWalkTest3( string[] arsg, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            bool result = jfm.OWalk(fr, arsg);
+            Assert.AreEqual(expected, result);
+        }
+
+
+        [DataTestMethod]
+        [DynamicData(nameof(GetData2), DynamicDataSourceType.Method)]
+        public void OWalkTest4(string[] args, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            bool result = jfm.OWalk(fr, args);
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> GetData2()
+        {
+            yield return new object[] { new string[] { "walk" }, true };          //késleltetett hozzáférést biztosít
+            yield return new object[] { new string[]{ "walk", "run" }, false };
+        }
+
+        [DataTestMethod]
+        [DynamicData(nameof(Data2), DynamicDataSourceType.Property)]
+        public void OWalkTest5(string[] args, bool expected)
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            bool result = jfm.OWalk(fr, args);
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> Data2
+        {
+            get
+            {
+                yield return new object[] { new string[] { "walk" }, true };          //késleltetett hozzáférést biztosít
+                yield return new object[] { new string[] { "walk", "run" }, false };
+            }
+        }
+
+
+        [DataTestMethod]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV",
+            @"Data\data2.csv",
+            "data2#csv", DataAccessMethod.Sequential)]
+        public void OWalkTest6()
+        {
+            JumpFrogsMethods jfm = new JumpFrogsMethods();
+            Frogs fr = new Frogs();
+            fr.status = new string[] { "X", "X", "_", "O", "O" };
+            string parameters = Convert.ToString(TestContext.DataRow["parameters"].ToString());
+            string[] args = parameters.Split(':');
+            bool expected = Convert.ToBoolean(TestContext.DataRow["expected"].ToString());
+            bool result = jfm.OWalk(fr, args);
+            Assert.AreEqual(expected, result);
+        }
+    }
+}
