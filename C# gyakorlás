@@ -1,0 +1,151 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace HelloWord
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            //Console.WriteLine("Hello World!");
+            //string s = Console.ReadLine();
+            //Console.WriteLine(s);
+
+            //while (s != null)
+            //{
+            //    Console.WriteLine(s + 2);
+            //    Console.WriteLine(Convert.ToInt32(s) + 2);
+            //    Console.WriteLine(int.Parse(s) + 2);
+            //    s = Console.ReadLine();
+            //}
+
+            //int sti;
+            //string s = Console.ReadLine();
+            //while (s != null)
+            //{
+            //    if (int.TryParse(s, out sti))
+            //    {
+            //        Console.WriteLine(sti + 2);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("A konverzió nem sikerült");
+            //    }
+            //    s = Console.ReadLine();
+            //}
+
+            //string s = Console.ReadLine();
+            //int[] t;
+            //while (s != null)
+            //{
+            //    t = s.Split(' ').Select(a => Convert.ToInt32(a)).ToArray();
+            //    Console.WriteLine(t);
+            //    Console.WriteLine(String.Join(", ", t));
+            //    foreach (int item in t)
+            //    {
+            //        Console.WriteLine(item + 2);
+            //    }
+            //    s = Console.ReadLine();
+            //}
+
+            //int n = Convert.ToInt32(Console.ReadLine());
+            //string s;
+            //for (int i = 0; i < n; i++)
+            //{
+            //    s = Console.ReadLine();
+            //    if (s.Length < 10)
+            //    {
+            //        Console.WriteLine("Ez rövid volt.");
+            //    }
+            //    else if (s.Length < 20)
+            //    {
+            //        Console.WriteLine(s.Substring(9));
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Ez túl hosszú volt.");
+            //    }
+            //}
+
+            //int n = Convert.ToInt32(Console.ReadLine());
+            //int[] t;
+            //string s;
+            //for (int i = 0; i < n; i++)
+            //{
+            //    s = Console.ReadLine();
+            //    t = s.Split(' ').Select(a => Convert.ToInt32(a)).ToArray();
+            //    int max = t[0];
+            //    for (int j = 1; j < t.Length; j++)
+            //    {
+            //        if (t[j] > max)
+            //        {
+            //            max = t[j];
+            //        }
+            //    }
+            //    Console.WriteLine("max érték: " + max);
+            //}
+
+            //Thread.CurrentThread.CurrentCulture
+            //    = CultureInfo.CreateSpecificCulture("en-US");
+
+            //int n = Convert.ToInt32(Console.ReadLine());
+            //int sum = 0;
+            //for (int i = 0; i < n; i++)
+            //{
+            //    sum += Convert.ToInt32(Console.ReadLine());
+            //}
+            //Console.WriteLine(String.Format("{0:.00}", sum / n));
+
+            //double pi = 3.14;
+            //Console.WriteLine(String.Format("{0:.00}", pi));
+
+
+            //int a = Convert.ToInt32(Console.ReadLine());
+            //int b = Convert.ToInt32(Console.ReadLine());
+            //for (int i = a; i != 0; i--)
+            //{
+            //    if (a % i == 0 && b % i == 0)
+            //    {
+            //        Console.WriteLine(i);
+            //        break;
+            //    }
+            //}
+
+            //int i;
+            //for (i = a; a % i != 0 || b % i != 0; i--) ;
+            //Console.WriteLine(i);
+
+            //int m;
+            //while ((m = a % b) != 0)
+            //{
+            //    a = b;
+            //    b = m;
+            //}
+            //Console.WriteLine(b);
+
+
+            //for (; (m = a % b) != 0; a = b, b = m) ;
+            //Console.WriteLine(b);
+
+            //string s;
+            //for (s = Console.ReadLine(); s != null; s = Console.ReadLine()) ;
+
+            int[] t = new int[] { 1, 2, 3, 4 };
+            Console.WriteLine(String.Join(" ", t));
+            int help;
+            for (int i = 0, j = t.Length-1; i < j; i++, j--)
+            {
+                help = t[i];
+                t[i] = t[j];
+                t[j] = help;
+            }
+            Console.WriteLine(String.Join(" ", t));
+        }
+    }
+}
