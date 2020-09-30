@@ -149,3 +149,134 @@ namespace HelloWord
         }
     }
 }
+
+//2. óra
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Second
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+            //int huf = 25;
+            //string s;
+            //switch (s = Console.ReadLine())
+            //{
+            //    case "USD":
+            //        Console.WriteLine(huf / 315.0);
+            //        break;
+            //    case "EUR":
+            //        Console.WriteLine(huf / 368.0);
+            //        break;
+            //    case "FONT":
+            //        Console.WriteLine(huf / 400.0);
+            //        break;
+            //}
+
+            //Console.WriteLine(Program.sumNAndM(2, 5));
+
+            //string s = Console.ReadLine();
+            //while (s != null)
+            //{
+            //    int n = Convert.ToInt32(s);
+            //    Console.Write(n + ":");
+            //    for (int i = 1; i < n+1; i++)
+            //    {
+            //        if (n % i == 0)
+            //        {
+            //            Console.Write(" " + i);
+            //        }
+            //    }
+            //    Console.WriteLine();
+            //    s = Console.ReadLine();
+            //}
+
+            //string s = Console.ReadLine();
+            //while (s != null)
+            //{
+            //    int[] t = s.Split(' ').Select(a => Convert.ToInt32(a)).ToArray();
+            //    int min = t[0];
+            //    int max = t[0];
+            //    int mindDb = 1;
+            //    int maxDb = 1;
+            //    for (int i = 1; i < t.Length; i++)
+            //    {
+            //        if (min == t[i])
+            //        {
+            //            mindDb++;
+            //        }
+            //        if (min > t[i])
+            //        {
+            //            min = t[i];
+            //            mindDb = 1;
+            //        }
+            //        if (max == t[i])
+            //        {
+            //            maxDb++;
+            //        }
+            //        if (max < t[i])
+            //        {
+            //            max = t[i];
+            //            maxDb = 1;
+            //        }
+            //    }
+            //    Console.WriteLine(mindDb + " " + maxDb);
+            //    s = Console.ReadLine();
+            //}
+
+
+            //string s = Console.ReadLine();
+            //while (s != null)
+            //{
+            //    string[] t = s.Split(',');
+            //    int sum = 0;
+            //    foreach (string item in t)
+            //    {
+            //        string[] t2 = item.Split(':');
+            //        sum += Convert.ToInt32(t2[1]);
+            //    }
+            //    Console.WriteLine(t.Length + " " + sum);
+            //    s = Console.ReadLine();
+            //}
+
+
+            string word = Console.ReadLine();
+            string s = Console.ReadLine();
+            while (s != null)
+            {
+                int db = 0;
+                for (int i = 0; i <= s.Length - word.Length; i++)
+                {
+                    if (s.Substring(i,word.Length) == word)
+                    {
+                        db++;
+                    }
+                }
+                Console.WriteLine(db);
+                s = Console.ReadLine();
+            }
+        }
+
+        public static int sumNAndM(int n, int m)
+        {
+            int sum = n;
+            if (n < m)
+            {
+                n++;
+                sum += sumNAndM(n, m);
+            }
+            return sum;
+        }
+
+
+    }
+}
+
