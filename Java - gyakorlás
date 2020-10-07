@@ -193,3 +193,133 @@ public class NewClass {
         return c;
     }
 }
+
+
+________________________________________________________________________________
+
+public class Point {
+
+    private double x;
+    private double y;
+
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
+        System.out.println("két paraméter");
+    }
+
+    public Point() {
+        this(0.0,0.0);
+        System.out.println("nulla paraméter");
+    }
+
+    public double tavolsag(){
+        return Math.sqrt(Math.pow(x,2) + Math.pow(y,2));
+    }
+
+    public double tavolsag(Point p){
+        return Math.sqrt(Math.pow(x-p.getX(),2) + Math.pow(y - p.getX(),2));
+    }
+
+    public static double tavolsag(Point p, Point s){
+        return Math.sqrt(Math.pow(p.getX() - s.getX(),2)
+                + Math.pow(p.getY() - s.getY(),2));
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Point)){
+            return false;
+        }
+        Point tmp = (Point)obj;
+        return this.tavolsag() == tmp.tavolsag();
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + "," + y + ")";
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+}
+
+
+
+public class Person {
+
+    public final static boolean MALE = false;
+    public final static boolean FEMALE = true;
+
+    private String name;
+    private int age;
+    private boolean isFemale;
+
+    public Person(String name, int age, boolean isFemale) {
+        this.name = name;
+        this.age = age;
+        this.isFemale = isFemale;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public boolean isFemale() {
+        return isFemale;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setFemale(boolean female) {
+        isFemale = female;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append(": ").append(age)
+                .append(" (");
+        if (isFemale){
+            sb.append("F)");
+        }
+        else {
+            sb.append("M)");
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof Person)){
+            return false;
+        }
+        Person tmp = (Person)obj;
+        return name.equals(tmp.getName())
+                && age == tmp.getAge()
+                && isFemale == tmp.isFemale();
+    }
+}
+
