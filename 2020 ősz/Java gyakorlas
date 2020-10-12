@@ -1,0 +1,197 @@
+//1. óra
+
+import java.util.Scanner;
+
+public class HelloWorld {
+
+    public static void main(String[] args){
+
+        System.out.println("Hello world!");
+
+        Scanner sc = new Scanner(System.in);
+
+//        int n = sc.nextInt();
+//        System.out.println(n);
+
+//        String s = sc.nextLine();
+//        String[] t = s.split(" ");
+//        for (String item : t){
+//            System.out.println(item + 2);
+//            System.out.println(Integer.parseInt(item) + 2);
+//        }
+//        int n;
+//        while (sc.hasNext()){
+//            n = sc.nextInt();
+//            System.out.println(n);
+//        }
+
+//        int n;
+//        while (true){
+//            n = sc.nextInt();
+//            if (n == 0){
+//                break;
+//            }
+//            System.out.println(n);
+//        }
+
+
+//        int n;
+//        int db = 0;
+//        int sum = 0;
+//        while ((n = sc.nextInt()) != 0){
+//            db++;
+//            sum += n;
+//        }
+//        System.out.println(sum / db);
+
+
+//        String s = sc.nextLine();
+//        Scanner sors = new Scanner(s);
+//        while (sors.hasNext()){
+//            System.out.println(sors.nextInt());
+//        }
+
+//        String s = "alma";
+//        System.out.println(s.substring(0,2));
+//        System.out.println(s.length());
+
+//        String sor;
+//        while (sc.hasNext()){
+//            sor = sc.nextLine();
+//            if (sor.length() < 10){
+//                System.out.println(sor);
+//            }
+//            else {
+//                System.out.println(sor.substring(0,10));
+//            }
+//        }
+    }
+}
+
+
+//2. óra
+
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Scanner;
+
+public class NewClass {
+
+    public static void main(String[] args) {
+
+//        double pi = 3.14;
+//
+//        System.out.println(pi);
+//        System.out.printf("%.2f%n",pi);
+//        System.out.println(String.format("%.2f",pi));
+//
+//        System.out.printf(Locale.ENGLISH,"%.2f%n",pi);
+//        System.out.println(String.format(new Locale("en","US"),"%.2f",pi));
+//
+//        Locale.setDefault(new Locale("en","US"));
+//        System.out.printf("%.2f%n",pi);
+//        System.out.println(String.format("%.2f",pi));
+
+        Scanner sc = new Scanner(System.in);
+
+//        switch (sc.nextInt()){
+//            case 1:
+//                System.out.println("Elégtelen");
+//                break;
+//            case 2:
+//                System.out.println("Elégséges");
+//                break;
+//            case 3:
+//                System.out.println("Közepes");
+//                break;
+//            default:
+//                System.out.println("Nincs ilyen érdemjegy");
+//            case 4:
+//                System.out.println("Jó");
+//                break;
+//            case 5:
+//                System.out.println("Jeles");
+//        }
+
+//        System.out.println(NewClass.fibo(10));
+//        System.out.println(NewClass.fibo2(10));
+
+//        int n;
+//        for (n = sc.nextInt(); n != 0; n = sc.nextInt()){
+//            System.out.println(n);
+//        }
+
+//        int[] t = new int[]{1,2,3,4,5};
+//        int help = 0;
+//        for (int i = 0, j = t.length-1; i < j; i++, j--){
+//            help = t[i];
+//            t[i] = t[j];
+//            t[j] = help;
+//        }
+//        System.out.println(Arrays.toString(t));
+
+//        String s1 = new String("alma");
+//        String s2 = "alma";
+//
+//        System.out.println(s1 == s2);
+//        System.out.println(s1.equals(s2));
+
+//        String s;
+//        while (true){
+//            s = sc.nextLine();
+//            if (s.equals("THE END")){
+//                break;
+//            }
+//            boolean isPoli = true;
+//            for (int i = 0, j = s.length()-1; i < j; i++, j--){
+//                if (s.charAt(i) != s.charAt(j)){
+//                    isPoli = false;
+//                    break;
+//                }
+//            }
+//            System.out.println( isPoli ? "YES" : "NO");
+//        }
+//
+//        s.split(",|:");
+
+        String[] s;
+        while (sc.hasNext()){
+            int eDb = 0;
+            s = sc.nextLine().split(",|:");
+            for (int i = 1; i < s.length; i += 2){
+                eDb += Integer.parseInt(s[i]);
+            }
+            System.out.println(s.length / 2 + " " + eDb);
+        }
+    }
+
+    public static int fibo2(int n){
+        if (n == 1){
+            return 0;
+        }
+        if (n == 2){
+            return 1;
+        }
+        return fibo2(n-1) + fibo2(n-2);
+    }
+
+    public static int fibo(int n){
+        int a = 0;
+        int b = 1;
+        int c = 0;
+        if (n == 1){
+            return a;
+        }
+        if (n == 2){
+            return b;
+        }
+        for (int i = 2 ; i < n; i++){
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
+    }
+}
+
+
