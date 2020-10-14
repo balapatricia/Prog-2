@@ -1,0 +1,203 @@
+//Point
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Classes
+{
+    class Point
+    {
+
+        public double X { get; set; }
+
+        public double Y { get; set; }
+
+        public Point(double x, double y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        public Point() : this(0.0, 0.0)
+        {
+        }
+
+        public double tavolsag()
+        {
+            return Math.Sqrt(Math.Pow(X, 2.0) + Math.Pow(Y, 2.0));
+        }
+
+        public override string ToString()
+        {
+            return "(" + X + ";" + Y + ")";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Point tmp = obj as Point;
+            if (tmp == null)
+            {
+                return false;
+            }
+            return this.tavolsag() == tmp.tavolsag();
+        }
+    }
+}
+
+
+//Person
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Classes
+{
+    class Person : IComparable
+    {
+
+        public static bool MALE = false;
+        public static bool FEMALE = true;
+
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public int Age { get; set; }
+
+        public bool IsFemale { get; set; }
+
+        public Person(string name, int age, bool isFemale)
+        {
+            this.name = name;
+            this.Age = age;
+            this.IsFemale = isFemale;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(name).Append(": ").Append(Age);
+            if (IsFemale)
+            {
+                sb.Append("(F)");
+            }
+            else
+            {
+                sb.Append("(M)");
+            }
+            return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Person tmp = obj as Person;
+            if (tmp == null)
+            {
+                return false;
+            }
+            return Name.Equals(tmp.Name) && Age == tmp.Age;
+        }
+
+        public int CompareTo(object obj)
+        {
+            Person tmp = obj as Person;
+            return Name.CompareTo(tmp.Name);
+        }
+
+        public static int CompareByNameAndAge(Person x, Person y)
+        {
+            int res = x.Name.CompareTo(y.Name);
+            if (res != 0)
+            {
+                return res;
+            }
+            return x.Age.CompareTo(y.Age);
+        } 
+    }
+
+    class PersonCompareByNameAndAge : IComparer<Person>
+    {
+        public int Compare(Person x, Person y)
+        {
+            int res = x.Name.CompareTo(y.Name);
+            if (res != 0)
+            {
+                return res;
+            }
+            return y.Age.CompareTo(x.Age);
+        }
+    }
+}
+
+
+//Test
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Classes
+{
+    class Test
+    {
+        static void Main(string[] args)
+        {
+            //Person p = new Person("Teszt Elek", 30, Person.MALE);
+            //Console.WriteLine(p);
+            //Console.WriteLine(p.Name);
+            ////p.Name = "Juliska";
+            ////Console.WriteLine(p.Name);
+            //Console.WriteLine(p.Age);
+            //Person q = new Person("Teszt Elek", 31, Person.MALE);
+            //Console.WriteLine(p == q);
+            //Console.WriteLine(p.Equals(q));
+
+            //Point p = new Point(3.2, 5.4);
+            //Console.WriteLine(p);
+            //Point q = new Point();
+            //Console.WriteLine(q);
+            //Point x = new Point(1.5, 3.2);
+            //Console.WriteLine(p.Equals(x));
+
+
+            int[] i = { 3, 4, 5, 9, 1, 4 };
+            Console.WriteLine(String.Join(",",i));
+            Array.Sort(i);
+            Console.WriteLine(String.Join(",", i));
+            Array.Sort(i, Test.IntReverseOrder);
+            Console.WriteLine(String.Join(",", i));
+
+            Person[] t = {new Person("Teszt Elek",34,Person.MALE),
+                            new Person("Juliska",42,Person.FEMALE),
+                            new Person("Manci",20,Person.FEMALE),
+                            new Person("Teszt Elek",30,Person.MALE)};
+            Console.WriteLine(String.Join(", ",(object[])t));
+            Array.Sort(t);
+            Console.WriteLine(String.Join(", ", (object[])t));
+            Comparison<Person> c = Person.CompareByNameAndAge;
+            Array.Sort(t, c);
+            Console.WriteLine(String.Join(", ", (object[])t));
+            PersonCompareByNameAndAge pcbn = new PersonCompareByNameAndAge();
+            Array.Sort(t, pcbn);
+            Console.WriteLine(String.Join(", ", (object[])t));
+
+        }
+
+        static int IntReverseOrder(int x, int y)
+        {
+            return y.CompareTo(x);
+        }
+    }
+}
