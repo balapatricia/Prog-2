@@ -60,6 +60,12 @@ namespace HelloWorld
             }
             
             Console.WriteLine();
+            
+            for (int i = 0; i < l.Count; i++){
+                Console.WriteLine(l[i]);
+            }
+            
+            Console.WriteLine();
             Console.WriteLine("Element in 1. index: " + l[1]);      //i. indexen lévő elem
 
             l.Insert(2, new Person("Juliska",24,false));            //elem beszúrása az i. indexre
