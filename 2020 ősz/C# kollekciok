@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace HelloWorld
+{
+    class Set
+    {
+        static void Main(string[] args)
+        {
+            ISet<int> i = new HashSet<int>();                //Halmaz, nincsen meghatározott sorrendje az elemeknek, nincs redundancuia
+            i.Add(2);
+            i.Add(1);
+            i.Add(5);
+            i.Add(4);
+            i.Add(7);
+            Console.WriteLine(string.Join(", ", i));
+
+            ISet<int> ii = new SortedSet<int>();             //rendezett halmaz, a természetes rendezés alapján lesznek sorrendben az elemek, ismétlődés még mindig nincs
+            ii.Add(2);
+            ii.Add(1);
+            ii.Add(5);
+            ii.Add(4);
+            ii.Add(7);
+            Console.WriteLine(string.Join(", ", ii));
+
+            ISet<int> mas = new SortedSet<int>(i);            // egy HashSet-et SortedSet-té alakítunk
+            Console.WriteLine(string.Join(", ", mas));
+
+            int[] t = { 2, 6, 1, 5, 0 };
+
+            ISet<int> mass = new SortedSet<int>(t);          // egy tömböt alakítunk SortedSet-té, paraméterben meg lehet adni a tömb referenciaváltozóját 
+            Console.WriteLine(string.Join(", ", mass));
+
+            ISet<Person> ps = new HashSet<Person>();         // a hashcode-ot figyeli először, ha az alapján nem tud dönteni, az equals metódus alapján dönt
+            ps.Add(new Person("Teszt Elek", 32, false));
+            ps.Add(new Person("Teszt Elek",32,false));
+            ps.Add(new Person("Har Mónika", 24, true));
+            Console.WriteLine(string.Join(", ", ps));
+
+            ISet<Person> pss = new SortedSet<Person>();      // az osztály CompareTo metódusát veszi alapul
+            pss.Add(new Person("Teszt Elek", 32, false));
+            pss.Add(new Person("Teszt Elek", 32, false));
+            pss.Add(new Person("Har Mónika", 24, true));
+            Console.WriteLine(string.Join(", ", pss));
+
+        
+
+        }
+    }
+}
+
+
+// A Person osztály kiegészítendő a GetHashCode() metódussal a HashSet megfelelő működése érdekében
+
+        public override int GetHashCode()
+        {
+            Console.WriteLine("hashCode: " + this);           // pl.
+            return Name.Length;
+        }
