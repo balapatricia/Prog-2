@@ -45,8 +45,51 @@ namespace HelloWorld
             pss.Add(new Person("Teszt Elek", 32, false));
             pss.Add(new Person("Har Mónika", 24, true));
             Console.WriteLine(string.Join(", ", pss));
+            
 
-        
+            List<Person> l = new List<Person>();            //lista létrehozása
+            l.Add(new Person("Teszt Elek", 32, false));
+            l.Add(new Person("Teszt Elek",32,false));
+            l.Add(new Person("Har Mónika", 24, true));
+            Console.WriteLine(string.Join(", ", l));
+
+            Console.WriteLine("Size: " + l.Count);          //lista mérete
+
+            foreach (Person person in l){                   //lista bejárása
+                Console.WriteLine(person);
+            }
+            
+            Console.WriteLine();
+            Console.WriteLine("Element in 1. index: " + l[1]);      //i. indexen lévő elem
+
+            l.Insert(2, new Person("Juliska",24,false));            //elem beszúrása az i. indexre
+            Console.WriteLine(string.Join(", ", l));
+
+            l.Sort();                                               //lista rendezése
+            Console.WriteLine(string.Join(", ", l));
+
+            
+            Console.WriteLine();
+
+            IDictionary<string,int> dict = new SortedDictionary<string,int>();          //Kulcs érték párokat reprezentál, egy kulcs egyszer szerepelhet, kulcsok szerint rendez
+            dict.Add("alma",2);
+            dict.Add("barack",5);
+            dict.Add("ananasz",3);
+            dict.Add("korte",1);
+            Console.WriteLine(string.Join(", ", dict));
+
+            int value;
+            bool isValue = dict.TryGetValue("alma",out value);                          //megpróbáljuk lekérdezni az x kulcshoz tartozó értékét, igazzal tér vissza, ha sikerült és hamissal, ha nem, ha sikerült lekérni, azaz benne van a kulcs, akkor az out után szereplő változó tartalmazza az értéket
+            if (isValue){                                                               //ha benne van a kulcs a szótárba, a value-ba mentettem le az értékét, onnan ki tudom íratni
+                       Console.WriteLine("alma = " + value);                            
+            }
+
+            Console.WriteLine();
+
+            foreach (var entry in dict)                                                 //szótár bejárása és az elemek kiíratása
+            {
+                Console.WriteLine(entry.Key + " = " + entry.Value);
+            }
 
         }
     }
