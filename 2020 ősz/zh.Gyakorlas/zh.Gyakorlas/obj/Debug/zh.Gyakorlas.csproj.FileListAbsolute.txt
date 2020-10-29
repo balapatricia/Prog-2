@@ -1,0 +1,7 @@
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\bin\Debug\zh.Gyakorlas.exe.config
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\bin\Debug\zh.Gyakorlas.exe
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\bin\Debug\zh.Gyakorlas.pdb
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\obj\Debug\zh.Gyakorlas.csprojAssemblyReference.cache
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\obj\Debug\zh.Gyakorlas.csproj.CoreCompileInputs.cache
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\obj\Debug\zh.Gyakorlas.exe
+C:\Users\Panna\source\repos\zh.Gyakorlas\zh.Gyakorlas\obj\Debug\zh.Gyakorlas.pdb
