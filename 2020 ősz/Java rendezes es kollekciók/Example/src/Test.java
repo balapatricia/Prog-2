@@ -102,6 +102,8 @@ public class Test {
 //        System.out.println(l);
 //        l.add(2,new Person("Piroska neni",65,Person.FEMALE));                                 i. indexre beszúr egy új elemet, a korábbi elemek indexe tolódik
 //        System.out.println(l);    
+        
+//        Collections.sort(l);                                                                  LISTA RENDEZÉSE természetes rendezés alapján       
 //
 //        Iterator<Person> it = l.iterator();                                                   Lista bejáráse foreachel és Iteratorral
 //        while (it.hasNext()){
