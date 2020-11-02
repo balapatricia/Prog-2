@@ -88,7 +88,7 @@ public class Test {
 //            System.out.println(it.next());
 //        }
 
-//        List<Person> l = new ArrayList<>();                                                   Lista, rendezett elemeket tartalmaz a természetes rendezés szerint, lehet redundancia
+//        List<Person> l = new ArrayList<>();                                                   Lista, lehet redundancia,ez elemek a belepakolás sorrendjében szerepelnek
 //        l.add(new Person("Teszt Elek",30, Person.MALE));
 //        l.add(new Person("Pista bacsi",67,Person.MALE));
 //        l.add(new Person("Joska bacsi",76,Person.MALE));
@@ -103,7 +103,7 @@ public class Test {
 //        l.add(2,new Person("Piroska neni",65,Person.FEMALE));                                 i. indexre beszúr egy új elemet, a korábbi elemek indexe tolódik
 //        System.out.println(l);    
         
-//        Collections.sort(l);                                                                  LISTA RENDEZÉSE természetes rendezés alapján       
+//        Collections.sort(l);                                                                  LISTA RENDEZÉSE természetes rendezés alapján, ha másfajta rendezést szeretnénk, azt paraméterben kell megadni (mint az Arrays.sort() esetében)      
 //
 //        Iterator<Person> it = l.iterator();                                                   Lista bejáráse foreachel és Iteratorral
 //        while (it.hasNext()){
