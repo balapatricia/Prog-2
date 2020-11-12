@@ -1,0 +1,9 @@
+C:\Users\Panna\source\repos\Fajl\Fajl\bin\Debug\Fajl.exe.config
+C:\Users\Panna\source\repos\Fajl\Fajl\bin\Debug\Fajl.exe
+C:\Users\Panna\source\repos\Fajl\Fajl\bin\Debug\Fajl.pdb
+C:\Users\Panna\source\repos\Fajl\Fajl\obj\Debug\Fajl.csprojAssemblyReference.cache
+C:\Users\Panna\source\repos\Fajl\Fajl\obj\Debug\Fajl.csproj.CoreCompileInputs.cache
+C:\Users\Panna\source\repos\Fajl\Fajl\obj\Debug\Fajl.exe
+C:\Users\Panna\source\repos\Fajl\Fajl\obj\Debug\Fajl.pdb
+C:\Users\Panna\source\repos\Fajl\Fajl\bin\Debug\new.txt
+C:\Users\Panna\source\repos\Fajl\Fajl\bin\Debug\test.txt
