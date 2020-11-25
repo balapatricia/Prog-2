@@ -1,0 +1,227 @@
+A tesztelendő metódusokat tartalmazó osztály
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Testtest
+{
+    public class Method
+    {
+
+        public bool prim(int a)
+        {
+            for (int i = 2; i < a; i++)
+            {
+                if (a % i == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public List<int> div(int a)
+        {
+            List<int> res = new List<int>();
+            for (int i = 1; i <= a; i++)
+            {
+                if (a % i == 0)
+                {
+                    res.Add(i);
+                }
+            }
+            return res;
+        }
+    }
+}
+
+
+A teszt osztály, a metódusnéven jobbklikk és create unit test, a felugró ablakon semmit nem változtatunk
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Testtest;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Testtest.Tests
+{
+    [TestClass()]
+    public class MethodTests
+    {
+        [TestMethod()]
+        public void primTest()
+        {
+            //Arrange
+            Method m = new Method();
+            //Act
+            bool result = m.prim(3);
+            //Assert
+            Assert.AreEqual(true, result);
+        }
+
+        [DataRow(11, true)]
+        [DataRow(3, true)]
+        [TestMethod()]
+        public void primTest2(int a, bool expected)
+        {
+            //Arrange
+            Method m = new Method();
+            //Act
+            bool result = m.prim(a);
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [DynamicData(nameof(GetData), DynamicDataSourceType.Method)]
+        [TestMethod()]
+        public void primTest3(int a, bool expected)
+        {
+            //Arrange
+            Method m = new Method();
+            //Act
+            bool result = m.prim(a);
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> GetData()
+        {
+            yield return new object[] { 3, true };
+            yield return new object[] { 10, false };
+            yield return new object[] { 11, true };
+        }
+
+        [DynamicData(nameof(Data), DynamicDataSourceType.Property)]
+        [TestMethod()]
+        public void primTest4(int a, bool expected)
+        {
+            //Arrange
+            Method m = new Method();
+            //Act
+            bool result = m.prim(a);
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> Data
+        {
+            get
+            {
+                yield return new object[] { 3, true };
+                yield return new object[] { 10, false };
+                yield return new object[] { 11, true };
+            }
+        }
+
+        public TestContext TestContext { get; set; }
+
+        //Copy always / Copy if newer, save ... as -> UTF 8 without signiture (!!!) minden fájlnál
+
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV",
+            @"prim.csv", "prim#csv", DataAccessMethod.Sequential)]
+        [TestMethod()]
+        public void primTest5()
+        {
+            Method m = new Method();
+            int parameter = Convert.ToInt32(TestContext.DataRow["parameter"].ToString());
+            bool expected = Convert.ToBoolean(TestContext.DataRow["expected"].ToString());
+
+            bool result = m.prim(parameter);
+            Assert.AreEqual(expected, result);
+        }
+
+        [DataSource("System.Data.Odbc",
+            @"Dsn=Excel Files;DriverID=790;dbq=|DataDirectory|\primFromExcel.xlsx",
+            "Prim$", DataAccessMethod.Sequential)]
+        [TestMethod()]
+        public void primTest6()
+        {
+            Method m = new Method();
+            int parameter = Convert.ToInt32(TestContext.DataRow["parameter"].ToString());
+            bool expected = Convert.ToBoolean(TestContext.DataRow["expected"].ToString());
+
+            bool result = m.prim(parameter);
+            Assert.AreEqual(expected, result);
+        }
+
+
+
+
+        [TestMethod()]
+        public void divTest()
+        {
+            Method m = new Method();
+            List<int> expected = new List<int>() { 1, 2, 4 };
+            List<int> result = m.div(4);
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        [DynamicData(nameof(GetData2), DynamicDataSourceType.Method)]
+        [TestMethod()]
+        public void divTest2(int a, List<int> expected)
+        {
+            Method m = new Method();
+            List<int> result = m.div(a);
+            Console.WriteLine(String.Join(", ",expected));
+            Console.WriteLine(String.Join(", ",result));
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> GetData2()
+        {
+            yield return new object[] { 4, new List<int>() { 1, 2, 4 } };
+            yield return new object[] { 10, new List<int>() { 1, 2, 5, 10 } };
+            yield return new object[] { 12, new List<int>() { 1, 2, 3, 4, 6, 12 } };
+        }
+
+        [DynamicData(nameof(Data2),DynamicDataSourceType.Property)]
+        [TestMethod()]
+        public void divTest3(int a, List<int> expected)
+        {
+            Method m = new Method();
+            List<int> result = m.div(a);
+            Console.WriteLine(String.Join(", ", expected));
+            Console.WriteLine(String.Join(", ", result));
+            CollectionAssert.AreEqual(expected, result);
+        }
+
+        public static IEnumerable<object[]> Data2
+        {
+            get
+            {
+                yield return new object[] { 4, new List<int>() { 1, 2, 4 } };
+                yield return new object[] { 10, new List<int>() { 1, 2, 5, 10 } };
+                yield return new object[] { 12, new List<int>() { 1, 2, 3, 4, 6, 12 } };
+            }
+        }
+
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV",
+            @"div.csv","div#csv", DataAccessMethod.Sequential)]
+        [TestMethod()]
+        public void divTest4()
+        {
+            Method m = new Method();
+            int parameter = Convert.ToInt32(TestContext.DataRow["parameter"].ToString());
+
+            List<int> expected = TestContext.DataRow["expected"].ToString().Split('#').
+                Select(a => Convert.ToInt32(a)).ToList();
+
+            List<int> result = m.div(parameter);
+            Console.WriteLine(String.Join(", ", expected));
+            Console.WriteLine(String.Join(", ", result));
+            CollectionAssert.AreEqual(expected, result);
+        }
+    }
+}
+
+
+A schema.ini fájl tartalma - ha egy csv-ben a ',' karaktertől eltérő karaktert szerenénk elválasztó karakterként használni
+
+[prim.csv]
+Format=Delimited(;)
