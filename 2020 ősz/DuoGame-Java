@@ -1,0 +1,201 @@
+package hu.unideb.inf.duogame;
+
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
+
+public class MyDuoGame implements DuoGame {
+    @Override
+    public TreeMap<Integer, Integer> freeCells(Status[] status) {
+        TreeMap<Integer,Integer> result = new TreeMap<>();
+        int idx = -1;
+        int lenght = -1;
+        boolean init= false;
+        for (int i = 1; i < status.length; i++){
+            if (!init && status[i] == Status.FREE){
+                idx = i;
+                lenght = 1;
+                result.put(idx,lenght);
+                init = true;
+            }
+            else if (init && status[i] == Status.FREE){
+                lenght++;
+                result.put(idx,lenght);
+            }
+            else if (!(status[i] == Status.FREE)){
+                init = false;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean finishedInNextMove(Status[] status) {
+        int i = 1;
+        for (; i < status.length; i++){
+            if (status[i] == Status.FREE){
+                break;
+            }
+        }
+        int j = status.length-1;
+        for (;j > 0; j--){
+            if (status[j] == Status.FREE){
+                break;
+            }
+        }
+        return i == j || i + 1 == j;
+    }
+
+    @Override
+    public Status[] applyMove(Status[] status, Status player, int start, int length) {
+        Status[] res = Arrays.copyOf(status, status.length);
+        res[start] = player;
+        if (length == 2){
+            res[start+1] = player;
+        }
+        return res;
+    }
+}
+
+__________________________________________________________________________________________
+
+
+package hu.unideb.inf.duogame;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.Arrays;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static hu.unideb.inf.duogame.Status.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class MyDuoGameTest {
+
+    @Test
+    void freeCells() {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] status = {FREE, FREE, ALICE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE};
+        Status[] original = Arrays.copyOf(status, status.length);
+        TreeMap<Integer, Integer> expected = new TreeMap<>();
+        expected.put(1, 1);
+        expected.put(4, 3);
+        expected.put(8, 1);
+        TreeMap<Integer, Integer> actual = duoGame.freeCells(status);
+        assertArrayEquals(original, status);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void finishedInNextMove() {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] status = {FREE, FREE, ALICE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE};
+        Status[] original = Arrays.copyOf(status, status.length);
+        boolean result = duoGame.finishedInNextMove(status);
+        assertArrayEquals(original, status);
+        assertFalse(result);
+    }
+
+    @Test
+    void applyMove() {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] status = {FREE, FREE, ALICE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE};
+        Status[] original = Arrays.copyOf(status, status.length);
+        Status player = ALICE;
+        int start = 4;
+        int length = 2;
+        Status[] expected = {FREE, FREE, ALICE, ALICE, ALICE, ALICE, FREE, BOB, FREE, BOB, ALICE};
+        Status[] actual = duoGame.applyMove(status, player, start, length);
+        assertArrayEquals(original, status);
+        assertArrayEquals(Arrays.copyOfRange(expected, 1, expected.length), Arrays.copyOfRange(actual, 1, actual.length));
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void freeCellsMethod(Status[] status, String s) {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] original = Arrays.copyOf(status,status.length);
+        TreeMap<Integer,Integer> expected = new TreeMap<>();
+        String[] pairs = s.split(",");
+        for (String item : pairs){
+            String[] element = item.split(":");
+            expected.put(Integer.parseInt(element[0]),Integer.parseInt(element[1]));
+        }
+        TreeMap<Integer,Integer> actual = duoGame.freeCells(status);
+        assertArrayEquals(original, status);
+        assertEquals(expected, actual);
+    }
+
+    static Stream<Arguments> freeCellsMethod(){
+        return Stream.of(
+                Arguments.arguments(new Status[]{FREE, FREE, ALICE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE},"1:1,4:3,8:1"),
+                Arguments.arguments(new Status[]{ALICE, ALICE, ALICE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE},"4:3,8:1"),
+                Arguments.arguments(new Status[]{FREE, FREE, FREE, ALICE, FREE, FREE, FREE, BOB, FREE, BOB, ALICE},"1:2,4:3,8:1"));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(delimiter = ',', resources = "finished.csv", numLinesToSkip = 1)
+    void finishedInNextMoveCsv(String statusString, boolean expected) {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] status = new Status[statusString.length()+1];
+        for (int i = 0; i < statusString.length(); i++){
+            if (statusString.charAt(i) == 'A'){
+                status[i+1] = ALICE;
+            }
+            else if(statusString.charAt(i) == 'B'){
+                status[i+1] = BOB;
+            }
+            else {
+                status[i+1] = FREE;
+            }
+        }
+        Status[] original = Arrays.copyOf(status,status.length);
+        boolean actual = duoGame.finishedInNextMove(status);
+        assertArrayEquals(original, status);
+        assertEquals(expected,actual);
+    }
+
+    @CsvSource({"AAFB,A,3,1,AAAB","AFFB,B,2,2,ABBB","AFFB,A,2,2,AAAB","AFFFB,A,2,1,AAFFB","AAFBF,B,5,1,AAFBB"})
+    @ParameterizedTest
+    void applyMoveCsv(String statusString, char playerChar, int start, int length, String expectedString) {
+        MyDuoGame duoGame = new MyDuoGame();
+        Status[] status = new Status[statusString.length()+1];
+        for (int i = 0; i < statusString.length(); i++){
+            if (statusString.charAt(i) == 'A'){
+                status[i+1] = ALICE;
+            }
+            else if(statusString.charAt(i) == 'B'){
+                status[i+1] = BOB;
+            }
+            else {
+                status[i+1] = FREE;
+            }
+        }
+        Status[] expected = new Status[expectedString.length()+1];
+        for (int i = 0; i < expectedString.length(); i++){
+            if (expectedString.charAt(i) == 'A'){
+                expected[i+1] = ALICE;
+            }
+            else if(expectedString.charAt(i) == 'B'){
+                expected[i+1] = BOB;
+            }
+            else {
+                expected[i+1] = FREE;
+            }
+        }
+        Status player = (playerChar == 'A' ? ALICE : BOB);
+        Status[] original = Arrays.copyOf(status,status.length);
+        Status[] actual = duoGame.applyMove(status,player,start,length);
+        assertArrayEquals(original, status);
+        assertArrayEquals(expected,actual);
+    }
+
+}
